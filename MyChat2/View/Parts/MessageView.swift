@@ -6,13 +6,12 @@
 
 import SwiftUI
 
-struct Message: View {
-    let message: MessageModel
+struct MessageView: View {
+    let message: Message
     let alignment: HorizontalAlignment
     let timeStamp: Date
 
-    
-    init(message: MessageModel, myDeviceID: String) {
+    init(message: Message, myDeviceID: String) {
         self.message = message
         self.alignment = message.deviceID == myDeviceID ? .trailing : .leading
         self.timeStamp = message.timeStamp

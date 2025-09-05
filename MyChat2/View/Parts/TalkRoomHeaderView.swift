@@ -6,11 +6,10 @@
 import SwiftUI
 
 struct TalkRoomHeaderView: View {
-    
-    let roomName: String
-    let roomId: String
+
     @Binding var selectedRoomID: String
     @Binding var isFullScreen: Bool
+    let room: Room
     
     var body: some View {
         HStack {
@@ -19,27 +18,25 @@ struct TalkRoomHeaderView: View {
             
             VStack {
                 HStack {
-                    Button(action: {
-                        selectedRoomID = self.roomId
+                    Button {
+                        selectedRoomID = self.room.roomId
                         DispatchQueue.main.async {
                                 isFullScreen = true
                         }
-                    }) {
-                        Text(roomName)
+                    }label: {
+                        Text(room.roomName)
                     }
                     Spacer()
-                    Text("last date")
+                    Text(room.lastTimestamp)
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                Text("last message")
+                Text(room.lastMessage)
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
         .padding(3)
-        //.background(.black)
-        
     }
 }
 

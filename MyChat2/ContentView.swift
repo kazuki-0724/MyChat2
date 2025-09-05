@@ -9,12 +9,7 @@ import SwiftUI
 // UIの親View
 struct ContentView: View {
     
-    // 全体表示を制御するフラグ
-    @State private var isFullScreen = false
-    // データを保持する構造体
-    @State private var viewModel = TalkViewModel()
-    // API呼び出し用のクラス
-    let apiClient = APIClient()
+    @StateObject private var viewModel = TalkViewModel()
     
     var body: some View {
         VStack(spacing: 0){
@@ -23,7 +18,8 @@ struct ContentView: View {
                 Text("My Chat2")
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                    .padding(5)
+                    .padding(.vertical, 5)
+                    .padding(.leading, 10)
                 Spacer()
             }
             .background(.teal)
@@ -33,20 +29,21 @@ struct ContentView: View {
             TabView{
                 // HomeViewの中でNavigationLinkを使うため、NavigationStackで囲っておく
                 NavigationStack{
-                    HomeView(isFullScreen: $isFullScreen,apiClient: apiClient).environmentObject(viewModel)
+                    HomeView().environmentObject(viewModel)
+                    
                 }.tabItem{
                     Label("Home",systemImage: "house")
                 }
                 
-                NewsView()
+                WebBridgeView()
                     .tabItem{
-                    Label("News",systemImage: "newspaper.fill")
-                }
-                
-                SettingView()
-                    .tabItem{
-                        Label("Settings",systemImage: "gearshape.fill")
+                        Label("WebView",systemImage: "safari.fill")
                     }
+                
+//                SettingView()
+//                    .tabItem{
+//                        Label("Settings",systemImage: "gearshape.fill")
+//                    }
             }
             .contentMargins(3)
         }

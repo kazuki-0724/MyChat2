@@ -7,26 +7,30 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State private var selectedRoomID: String = "room1"
     @EnvironmentObject var viewModel: TalkViewModel
-    @Binding var isFullScreen: Bool
-    //let apiClient: APIClient = APIClient()
-    let apiClient: APIClient
-    
-    let room_items: [(id: String, value: String)] = [
-        (id: "room1", value: "ルーム1"),
-        (id: "room2", value: "ルーム2"),
-        (id: "room3", value: "ルーム3")
-    ]
+    @State private var selectedRoomID: String = "room1"
+    @State private var isFullScreen = false
+    private var apiClient = APIClient.shared
     
     var body: some View {
-        List(room_items, id: \.id) { room in
-            TalkRoomHeaderView(roomName: room.value,roomId: room.id, selectedRoomID: $selectedRoomID, isFullScreen: $isFullScreen)
+        List(viewModel.rooms, id: \.roomId) { room in
+            TalkRoomHeaderView(selectedRoomID: $selectedRoomID, isFullScreen: $isFullScreen, room: room)
         }
+//        .task {
+//            do {
+//                // GASからメッセージを取得してくる
+//                let messages = try await self.apiClient.getMessages()
+//                // メッセージを読み込ませる
+//                for message in messages {
+//                    self.viewModel.loadMessagesFromGAS(message: message)
+//                }
+//            } catch {
+//                print("[HomeView] GASからのデータ取得エラー:", error.localizedDescription)
+//            }
+//        }
         // List内の要素が変化するたびに、状態が更新される
         .fullScreenCover(isPresented: $isFullScreen) {
-            TalkRoomContainerView(roomId: self.selectedRoomID,apiClient: self.apiClient)
-                    .environmentObject(viewModel)
+            TalkRoomView(roomId: $selectedRoomID)
         }
     }
 }
